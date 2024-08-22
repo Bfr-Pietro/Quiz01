@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url(assets/imgs/Screenshot\ 2024-08-21\ at\ 22-12-22\ Etec\ Darcy\ Pereira\ de\ Moraes\ \(@etecdarcypereira\)\ •\ Fotos\ e\ vídeos\ do\ Instagram.png);
+        }
+        .quiz-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .quiz-container h2 {
+            margin-bottom: 20px;
+        }
+        .quiz-container button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .quiz-container button:hover {
+            background: #0056b3;
+        }
+        #score {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2 id="question">Qual é o professor que fica gemendo na sala de aula?</h2>
+        <button onclick="checkAnswer('a')">Kaue</button>
+        <button onclick="checkAnswer('b')">Galão</button>
+        <button onclick="checkAnswer('c')">Marcelo</button>
+        <button onclick="checkAnswer('d')">Ari</button>
+        <p id="result"></p>
+        <p id="score">Pontos: 0</p>
+        <button id="restart" onclick="restartQuiz()" style="display: none;"><h1>Reiniciar o Quiz</h1></button>
+    </div>
+
+    <script>
+        let score = 0;
+        let currentQuestion = 0;
+
+        const questions = [
+            {
+                question: "Quem é o(a) Bin Laden do 1° Info?",
+                answers: { a: "Otávio Romio", b: "Sedex", c: "Igor", d: "Sara" },
+                correct: "c"
+            },
+            {
+                question: "Quem quebrou o vidro na aula do Marco?",
+                answers: { a: "Pac", b: "Júlia Gomes", c: "Wesley", d: "Aquila" },
+                correct: "a"
+            },
+            {
+                question: "Quem quebrou a janela do ônibus da circular?",
+                answers: { a: "Mateus", b: "Sedex", c: "Bibi", d: "Otávio Amaral" },
+                correct: "b"
+            },
+            {
+                question: "Quem é o(a) vereador(a) da sala? (Segundo a professora Angela Cruz)",
+                answers: { a: "Augusto", b: "Juliano", c: "Vitória", d: "Adrian" },
+                correct: "a"
+            },
+            {
+                question: "Quem vende bolo na sala?",
+                answers: { a: "Gustavo", b: "Brenda", c: "Eduardo", d: "Aquila" },
+                correct: "d"
+            },
+            {
+                question: "Quem tacou fogo na bandeira gay?",
+                answers: { a: "Luiz", b: "Maria", c: "Murilo", d: "Vitor Rafael" },
+                correct: "c"
+            },
+            {
+                question: "Quem fingiu que tava com dor de cabeça na apresentação da rosinha?",
+                answers: { a: "Juliano", b: "vitória", c: "Miguel", d: "João Augusto" },
+                correct: "a"
+            },
+            // Adicione mais perguntas conforme necessário
+        ];
+
+        function checkAnswer(answer) {
+            const result = document.getElementById('result');
+            if (answer === questions[currentQuestion].correct) {
+                score += 10;
+                result.textContent = 'Correto!';
+                result.style.color = 'green';
+                nextQuestion();
+            } else {
+                score -= 5;
+                result.textContent = 'Errado! Tente novamente.';
+                result.style.color = 'red';
+            }
+            document.getElementById('score').textContent = `Pontos: ${score}`;
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                document.getElementById('question').textContent = questions[currentQuestion].question;
+                document.querySelectorAll('.quiz-container button').forEach((button, index) => {
+                    button.textContent = Object.values(questions[currentQuestion].answers)[index];
+                });
+                document.getElementById('result').textContent = '';
+            } else {
+                displayFinalMessage();
+            }
+        }
+
+        function displayFinalMessage() {
+            const questionElement = document.getElementById('question');
+            const buttons = document.querySelectorAll('.quiz-container button');
+            const restartButton = document.getElementById('restart');
+            let finalMessage = '';
+
+            if (score <= 10) {
+                finalMessage = 'Você é muito burro! Não acertou quase nada.';
+            } else if (score <= 30) {
+                finalMessage = 'Você precisa ir mais pra escola! Não sabe quase nada sobre a sala.';
+            } else if (score <= 59) {
+                finalMessage = 'Você não foi tão ruim, mas dava pra ser melhor, não?';
+            } else {
+                finalMessage = 'Parabéns, você sabe o básico sobre a sala!';
+            }
+
+            questionElement.textContent = finalMessage;
+            buttons.forEach(button => button.style.display = 'none');
+            restartButton.style.display = 'block';
+        }
+
+        function restartQuiz() {
+            score = 0;
+            currentQuestion = 0;
+            document.getElementById('score').textContent = `Pontos: ${score}`;
+            document.getElementById('question').textContent = questions[currentQuestion].question;
+            document.querySelectorAll('.quiz-container button').forEach((button, index) => {
+                button.textContent = Object.values(questions[currentQuestion].answers)[index];
+                button.style.display = 'block';
+            });
+            document.getElementById('result').textContent = '';
+            document.getElementById('restart').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
